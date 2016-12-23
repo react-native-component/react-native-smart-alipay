@@ -20,24 +20,16 @@ RCT_EXPORT_MODULE(AliPay);
     
 }
 
-RCT_EXPORT_METHOD(payOrder:(NSDictionary *)params
-                  resolver:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject){
+RCT_EXPORT_METHOD(payOrder:(NSDictionary *)params){
     
     NSString *orderText = [params objectForKey:@"orderText"];
-    NSString *appScheme = [params objectForKey:@"appScheme"];
+    NSString *appScheme = [params objectForKey:@"appScheme"];   //应用注册scheme, 对应需要在Info.plist定义URL types
     
-    // NOTE: 调用支付结果开始支付
+    // NOTE: 调用支付结果开始支付, 如没有安装支付宝app，则会走h5页面，支付回调触发这里的callback
     [[AlipaySDK defaultService] payOrder:orderText fromScheme:appScheme callback:^(NSDictionary *resultDic) {
 //        NSLog(@"payOrder reslut = %@",resultDic);
-//        if(error) {
-//            callback(@[RCTMakeError([NSString stringWithFormat:@"%d", error.code], nil, nil)]);
-//        }
-//        else {
-//            callback(@[[NSNull null]]);
-//        }
-        resolve(resultDic);
-        //reject(...)
+        [self.bridge.eventDispatcher sendAppEventWithName:@"alipay.mobile.securitypay.pay.onPaymentResult"
+                                                     body:resultDic];
     }];
 }
 

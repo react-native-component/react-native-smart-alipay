@@ -1,5 +1,4 @@
 
-
 #import "RCTBridgeModule.h"
 
 @interface RCTAliPay : NSObject <RCTBridgeModule>
