@@ -1,6 +1,6 @@
 {
   "name": "react-native-smart-alipay",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "react-native 支付宝SDK 插件",
   "main": "Alipay.js",
   "scripts": {
