@@ -55,6 +55,8 @@ npm install react-native-smart-alipay --save
 
 * 选择Build Settings, 找到Header Search Paths, 确认其中包含$(SRCROOT)/../../../react-native/React, 模式为recursive.
 
+* 同上位置, 加入$(SRCROOT)/../node_modules/react-native-smart-alipay/ios/RCTAliPay/RCTAliPay, 模式为recursive.
+
 * 同上位置, 找到Framework Search Paths, 加入$(PROJECT_DIR)/Frameworks.
 
 * 点击在Libraries下已拖进来的RCTAliPay.xcodeproj, 选择Build Settings, 找到Framework Search Paths, 将$(SRCROOT)/../../../ios/Frameworks替换成$(SRCROOT)/../../../../ios/Frameworks.
@@ -69,7 +71,7 @@ npm install react-native-smart-alipay --save
 #import <AlipaySDK/AlipaySDK.h> //导入支付宝SDK库
 #import "RCTAliPay.h" //import interface
 ...
-//alipay-sdk 支付结果回调
+//支付宝app 支付结果回调
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication
@@ -78,23 +80,21 @@ npm install react-native-smart-alipay --save
   if ([url.host isEqualToString:@"safepay"]) {
     //跳转支付宝钱包进行支付，处理支付结果
     [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
-      //NSLog(@"processOrderWithPaymentResult result = %@",resultDic);
-      RCTAliPay *rctAlipay = [[RCTAliPay alloc] initBySingleton];
-      [rctAlipay processOrderWithPaymentResult:resultDic];
+//      NSLog(@"processOrderWithPaymentResult result = %@",resultDic);
+      [[NSNotificationCenter defaultCenter] postNotificationName:@"RCTAliPay_Notification_processOrderWithPaymentResult" object:nil userInfo:resultDic];
     }];
   }
   return YES;
 }
 
-//alipay-sdk 支付结果回调 NOTE: 9.0以后使用新API接口
+//支付宝app 支付结果回调 NOTE: 9.0以后使用新API接口
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString*, id> *)options
 {
   if ([url.host isEqualToString:@"safepay"]) {
     //跳转支付宝钱包进行支付，处理支付结果
     [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
-      //NSLog(@"processOrderWithPaymentResult result = %@",resultDic);
-      RCTAliPay *rctAlipay = [[RCTAliPay alloc] initBySingleton];
-      [rctAlipay processOrderWithPaymentResult:resultDic];
+//      NSLog(@"processOrderWithPaymentResult result = %@",resultDic);
+      [[NSNotificationCenter defaultCenter] postNotificationName:@"RCTAliPay_Notification_processOrderWithPaymentResult" object:nil userInfo:resultDic];
     }];
   }
   return YES;
@@ -128,7 +128,7 @@ dependencies {
 
 ```
 ...
-import com.reactnativecomponent.amaplocation.RCTAlipayPackage;    //import package
+import com.reactnativecomponent.alipay.RCTAlipayPackage;    //import package
 ...
 /**
  * A list of packages used by the app. If the app uses additional views
