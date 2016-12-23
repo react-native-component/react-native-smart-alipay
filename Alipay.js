@@ -9,4 +9,4 @@ import {
     NativeModules
 } from 'react-native'
 
-export default NativeModules.Alipay
+export default NativeModules.AliPay
