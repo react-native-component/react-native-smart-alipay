@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.alipay.sdk.app.PayTask;
 import com.facebook.react.bridge.Arguments;
@@ -50,7 +51,8 @@ public class RCTAlipayModule extends ReactContextBaseJavaModule {
                         switch (msg.what) {
                             case SDK_PAY_FLAG: {
                                 @SuppressWarnings("unchecked")
-                                PayResult payResult = new PayResult((Map<String, String>) msg.obj);
+//                                PayResult payResult = new PayResult((Map<String, String>) msg.obj);
+                                PayResult payResult = new PayResult(msg.obj.toString());
                                 /**
                                  对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
                                  */
@@ -73,7 +75,9 @@ public class RCTAlipayModule extends ReactContextBaseJavaModule {
                     @Override
                     public void run() {
                         PayTask alipay = new PayTask(activity);
-                        Map<String, String> result = alipay.payV2(orderText, true);
+//                        Map<String, String> result = alipay.payV2(orderText, true); //支付成功却返回resultStatus=6001, 这是新版方法的bug?
+                        String result = alipay.pay(orderText, true);    //退回使用旧版的方法, 支付成功可以正常返回resultStatus=6001, 但需要自行解析数据
+//                        Log.i("result = ", result.toString());
                         Message msg = new Message();
                         msg.what = SDK_PAY_FLAG;
                         msg.obj = result;
@@ -92,7 +96,7 @@ public class RCTAlipayModule extends ReactContextBaseJavaModule {
         WritableMap resultMap = Arguments.createMap();
 
         if (null != payResult) {
-            resultMap.putString("resultStatus", payResult.getResultStatus());
+            resultMap.putInt("resultStatus", Integer.parseInt(payResult.getResultStatus()));
             resultMap.putString("result", payResult.getResult());
             resultMap.putString("memo", payResult.getMemo());
         }
