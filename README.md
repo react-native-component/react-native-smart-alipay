@@ -23,7 +23,7 @@ npm install react-native-smart-alipay --save
 
 * 将RCTAliPay.xcodeproj作为Library拖进你的Xcode里的project中.
 
-* 将RCTAliPay目录里Frameworks目录拖进主project目录下, 选择copy items if needed, create groups, 另外add to target不要忘记选择主project.
+* 将RCTAliPay目录里Frameworks, AliPayResouces目录拖进主project目录下, 选择copy items if needed, create groups, 另外add to target不要忘记选择主project.
 
 * 点击你的主project, 选择Build Phases -> Link Binary With Libraries, 将RCTAliPay.xcodeproj里Product目录下的libRCTAliPay.a拖进去.
 
