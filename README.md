@@ -51,6 +51,8 @@ npm install react-native-smart-alipay --save
 
 * 同上位置, 选择Add items, 将系统库AlipaySDK.framework加入.
 
+* 找到AlipaySDK.framework -> Headers -> AlipaySDK.h, 加入`#import <UIKit/UIKit.h>`
+
 * 选择Build Settings, 找到Header Search Paths, 确认其中包含$(SRCROOT)/../../../react-native/React, 模式为recursive.
 
 * 同上位置, 找到Framework Search Paths, 加入$(PROJECT_DIR)/Frameworks.
